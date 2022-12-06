@@ -1,0 +1,596 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>FFmpeg | 大安的博客</title>
+
+<link rel="shortcut icon" href="https://github.com/gianyao/GianGridea.git/favicon.ico?v=1670311604485">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://github.com/gianyao/GianGridea.git/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            大安的博客
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1670311604485" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    FFmpeg
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-04-27 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <p>来源：https://www.jianshu.com/p/f20a47333d74</p>
+<p>一、简介<br>
+官方文档资料：http://ffmpeg.org/documentation.html<br>
+FFmpeg官方wiki:https://trac.ffmpeg.org<br>
+雷宵华博士总结的资料：http://blog.csdn.net/leixiaohua1020<br>
+罗索实验室：http://www.rosoo.net<br>
+ChinaFFmpeg:http://bbs.chinaffmpeg.com</p>
+<p>FFmpeg名称中的mpeg来自于视频编码标准MPEG,而前缀FF是Fast Forward的首字母缩写。FFmpeg既是一款音视频编解码工具，同时也是一组音视频编解码开发套件，作为编解码开发套件，它为开发者提供了丰富的音视频处理的调用接口。</p>
+<p>FFmpeg转码工作流程<br>
+读取文件——&gt;解封装——&gt;解码——&gt;转换参数——&gt;新编码——&gt;封装——&gt;写入文件</p>
+<p>FFmpeg的主要模块<br>
+AVUtil:核心工具类，该模块是最基础的模块之一，下面的许多其他模块都会依赖该库做一些基本的音视频处理操作。</p>
+<p>AVFormat:文件格式和协议库，该模块是最重要的模块之一，封装了Protocol层和Demuxer(解封装)和Muxer(封装)层。根据实际需求，可进行媒体封装格式的扩展，增加自己定制的封装格式，即在AVFormat中增加自己的封装处理模块。</p>
+<p>AVCodec:编解码库，该模块也是最重要的模块之一，封装了Codec层，但是有一些Codec是具备自己的License的，FFmpeg是不会默认添加像libx264、FDK-AAC、lame等库的，但是FFmpeg就像一个平台一样，可以将其他的第三方的Codec以插件的方式添加进来，然后为开发者提供统一的接口。</p>
+<p>AVFilter:音视频滤镜库，该模块提供了包括音频特效和视频特效的处理，在使用FFmpeg的API进行编解码的过程中，直接使用该模块为音视频数据做特效处理是非常方便同时也非常高效的一种方式。</p>
+<p>AVDevice:输入输出设备库，比如，需要编译出播放声音或者视频的工具ffplay,就需要确保该模块是打开的，同时也需要libSDL的预先编译，因为该设备模块播放声音与播放视频使用的是libSDL库。</p>
+<p>SwrRessample:该模块可用于音频重采样，可以对数字音频进行声道数、数据格式、采样率等多种基本信息的转换。</p>
+<p>SWScale:该模块是将图像进行格式转换的模块，比如，可以将YUV的数据转换为RGB的数据。</p>
+<p>PostProc:该模块可用于进行后期处理，当我们使用AVFilter的时候需要打开该模块开关，因为Filter中会使用到该模块的一些基础函数。</p>
+<p>二、FFmpeg命令行工具<br>
+在Mac OS系统上直接在命令行下键入以下命令：</p>
+<p>brew install ffmpeg<br>
+就可以安装命令行工具了。</p>
+<p>1.ffprobe<br>
+首先用ffprobe查看一个音频的文件：</p>
+<p>ffprobe ~/Desktop/32037.mp3<br>
+键入上述命令之后，先看如下这行信息：</p>
+<p>Duration:00:05:14.83,start:0.000000,bitrate:64kb/s<br>
+这行信息表明，该音频文件的时长是5分14秒零830毫秒，开始播放时间是0，整个媒体文件的比特率64Kbit/s,然后再看另外一行：</p>
+<p>Stream#0:0  Audio:mp3, 24000Hz,stereo,s16p,64kb/s<br>
+这行信息表明，第一个流是音频流，编码格式是MP3格式，采样率是24kHz,声道是立体声，采样表示格式是SInt16(short)的planner（平铺格式），这路流的比特率是64Kbit/s。<br>
+然后在使用ffprobe查看一个视频的文件：</p>
+<p>ffprobe  ~/Desktop/32037.mp4<br>
+键入上述命令之后，可以看到第一部分的信息是Metadata信息：</p>
+<p>Metadata:<br>
+major_brand:isom<br>
+minor_version:512<br>
+compatible_brands:isomiso2avc1mp41<br>
+encoder:Lavf55.12.100<br>
+这行信息表明了该文件的Metadata信息，比如encoder是Lavf55.12.100,其中Lavf代表的是FFmpeg输出的文件，后面的编号代表了FFmpeg的版本代号，接下来的一行信息如下：</p>
+<p>Duration：00：04：34.56  start:0.023220,bitrate:577kb/s<br>
+上面一行的内容表示Duration是4分34秒560毫秒，开始播放的时间是从23ms开始播放的，整个文件的比特率是577Kbit/s,紧接着再看下一行：</p>
+<p>Stream#0:0(un):Video:h264(avc1/0x31637661),yuv420p,480*480,508kb/s,24fps<br>
+这行信息表示第一个stream是视频流，编码方式是H264的格式（封装格式是AVC1），每一帧的数据表示是YUV420P的格式，分辨率是480x480，这路流的比特率是508Kbit/s,帧率是每秒钟24帧，紧接着再来看下一行：</p>
+<p>Stream#0:1(und):Audio:aac(LC)(mp4a/0x6134706D),44100Hz,stereo,fltp,63kb/s<br>
+这行信息表示第二个stream是音频流，编码方式是AAC(封装格式是MP4A),并且采用的Profile是LC规格，采样率是44100Hz,声道数是立体声，数据表示格式是浮点型，这路音频流的比特率是63Kbit/s.</p>
+<p>以上就是使用ffprobe来提取音频文件和视频文件头信息的方式，以及提取出来信息的含义。当然ffprobe还有比较高级的用法，下面就来介绍几个：</p>
+<p>ffprobe -show_format 32037.mp4<br>
+上述命令可以输出格式信息format_name、时间长度duration、文件大小size、比特率bit_rate、流的数目nb_streams等。</p>
+<p>ffprobe -print_format json -show_streams 32037.mp4<br>
+上述命令可以以JSON格式的形式输出具体每一个流最详细的信息，视频中会有视频的宽高信息、是否有b帧、视频帧的总数目、视频的编码格式、显示比例、比特率等信息，音频中会有音频的编码格式、表示格式、声道数、时间长度、比特率、帧的总数目等信息<br>
+显示帧信息的命令如下：</p>
+<p>ffprobe -show_frames sample.mp4<br>
+查看包信息的命令如下：</p>
+<p>ffprobe -show_packets sample.mp4<br>
+2.ffplay<br>
+播放一个音频文件</p>
+<p>ffplay  32037.mp3<br>
+这时候会弹出一个窗口，一边播放MP3文件，一边将播放声音的语谱图画到该窗口是哪个。针对该窗口的操作如下，点击窗口的任意一个位置，ffplay会按照点击的位置计算出时间的进度，然后跳（seek）到这个时间点上继续播放；按下键盘上的右键会默认快进10s，左键默认后退10s,上键默认快进1min,下键默认后退1min;按ESC键就是退出播放进程；如果按w键则将绘制音频的波形图等。<br>
+播放一个视频的命令如下所示：</p>
+<p>ffplay 32037.mp4<br>
+这时候会直接在新弹出的窗口上播放该视频，如果想要同时播放多个文件，那么只需要在多个命令行下同时执行ffplay就可以了，在对比多个视频质量的时候这是一个操作技巧，此外，如果按s键则可以进入frame-step模式，即按s键一次就会播放下一帧图像，这在观察某些视频内部的帧内容时也是常用的技巧。</p>
+<p>ffplay 12345.mp4 -loop 10<br>
+上述命令代表播放视频结束之后会从头再次播放，共循环播放10次。</p>
+<p>ffplay 大话西游.mkv -ast 1<br>
+上述命令表示播放视频中的第一路音频流，如果参数ast后面跟的是2，那么就播放第二路音频流，如果没有第二路音频流的话，就会静音，同样也可以设置参数vst,比如：</p>
+<p>ffplay  大话西游.mkv -vst 1<br>
+上述命令表示播放视频中的第一路视频流，如果参数vst后面跟的是2，那么就播放第二路视频流，就会是黑屏即什么都不显示。<br>
+音频pcm文件的播放命令</p>
+<p>ffplay song.pcm -f  s16le -channels 2 -ar 44100<br>
+仅键入上述这行命令其实就可以正常播放了，前提是格式（-f）、声道数（-channels）、采样率（-ar）必须设置正确。<br>
+一帧YUV视频帧的播放</p>
+<p>ffplay -f rawvideo -pixel_format yuv420p -s 480<em>480 texture.yuv<br>
+格式（-f rawvideo代表原始格式）、表示格式（-pixel_format yuv420p）、宽高（-s 480</em>480）。<br>
+对于RGB表示的图像，其实是一样的。</p>
+<p>ffplay -f rawvideo -pixel_format rgb24 -s 480*480 texture.rgb<br>
+在ffplay中音画同步实现方式有三种，分别是：以音频为主时间轴作为同步源；以视频为主时间轴作为同步源；以外部时钟为时间轴作为同步源。默认是以音频为主时间轴。</p>
+<p>首先要声明的是，播放器接收到的视频帧或者音频帧，内部都会有时间戳（PTS时钟）来标识它实际应该在什么时刻进行展示。在实际的对齐策略如下：比较视频当前的播放时间和音频当前的播放时间，如果视频播放过快，增通过加大延迟或者重复播放来降低来降低视频播放速度；如果视频播放慢了，则通过减小延迟或者丢帧来追赶音频播放的时间点。关键在于音视频时间的比较以及延迟的计算，当然在比较的过程中，会设置一个阈值，若超过预设的阈值就应该做调整（丢帧渲染或者重复渲染），这就是整个对齐策略。</p>
+<p>以音频为主时间轴作为同步源：</p>
+<p>ffplay 12345.mp4 -sync audio<br>
+以视频为主时间轴作为同步源</p>
+<p>ffplay 12345.mp4 -sync video<br>
+以外部时钟为时间轴作为同步源</p>
+<p>ffplay 12345.mp4 -sync ext<br>
+3.ffmpeg<br>
+ffmpeg其实是这三个命令行工具里最强大的一个工具，如果说ffprobe是用于探测媒体文件的格式以及详细信息，ffplay是一个播放媒体文件的工具，那么ffmpeg就是强大的媒体文件转换工具。它可以转换任何格式的媒体文件，并且还可以用自己的AudioFilter以及VideoFilter进行处理和编辑，总之一句话，有了它，进行离线处理视频时可以做你任何你想做的事情了。下面先介绍总体的参数，然后再列出经典场景下的使用案例。<br>
+（1）通用参数<br>
+指定格式（音频或者视频格式）</p>
+<p>-f fmt<br>
+指定输入文件名，在Linux下当然也能指定：0.0（屏幕录制）或摄像头。</p>
+<p>-i filename<br>
+覆盖已有文件</p>
+<p>-y<br>
+指定时长</p>
+<p>-t duration<br>
+设置文件大小的上限</p>
+<p>-fs limit_size<br>
+从指定的时间（单位为秒）开始，也支持[-]hh:mm:ss[.xxx]的格式</p>
+<p>-ss time_off<br>
+代表按照帧率发送，尤其在作为推流工具的时候一定要加入该参数，否则ffmpeg会按照最高速率向流媒体服务器不停的发送数据。</p>
+<p>-re<br>
+指定输出文件的流映射关系。例如：“-map 1:0 -map 1:1”要求将第二个输入文件的第一个流和第二个流写入输出文件。如果没有-map 选项，则ffmpeg采用默认的映射关系。</p>
+<p>-map<br>
+(2)视频参数</p>
+<p>-b :指定比特率（bit/s）,ffmpeg是自动使用VBR的，若指定了该参数则使用平均比特率。<br>
+-bitexact:使用标准比特率。<br>
+-vb:指定视频比特率。<br>
+-r rate:帧速率。<br>
+-s size:指定分辨率（320x240）。<br>
+-aspect aspect:设置视频长宽比（4：3，16：9或1.3333，1.7777）。<br>
+-croptop size:设置顶部切除尺寸（in pixels）<br>
+-cropbottom size:设置底部切除尺寸（in pixels）<br>
+-cropleft size:设置左切除尺寸（in pixels）<br>
+-cropright size:设置右切除尺寸（in pixels）<br>
+-padtop size:设置顶部补齐尺寸（in pixels）<br>
+-padbottom size:设置底部补齐尺寸（in pixels）<br>
+-padleft size:左补齐（in pixels）<br>
+-padright size:右补齐（in pixels）<br>
+-padcolor color:补齐带颜色（000000-FFFFFF）<br>
+-vn:取消视频的输出。<br>
+-vcodec codec:强制使用codec编码方式（'copy'代表不进行重新编码）<br>
+（3）音频参数</p>
+<p>-ab:设置比特率（单位为bit/s,老版的单位可能是Kbit/s）,对于MP3格式，若要听到较高品质的声音则建议设置为160Kbit/s(单声道则设置为80Kbit/s)以上。<br>
+-aq quality:设置音频质量（指定编码）。<br>
+-ar rate:设置音频采样率（单位为Hz）.<br>
+-ar channels:设置声道数，1就是单声道，2就是立体声。<br>
+-an:取消音频轨。<br>
+-acodec codec：指定音频编码（'copy'代表不做音频转码，直接复制）。<br>
+-vol volume:设置录制音量大小（默认为256）&lt;百分比&gt;。<br>
+1)列出ffmpeg支持的所有格式：</p>
+<p>ffmpeg -formats<br>
+2)剪切一段媒体文件，可以是音频或者视频文件</p>
+<p>ffmpeg -i input.mp4 -ss 00:00:50.0 -codec copy -t 20 output.mp4<br>
+表示将文件input.mp4从第50s开始剪切20s的时间，输出到文件output.mp4中，其中-ss指定偏移时间（time Offset）,-t指定的时长（duration）。<br>
+3）如果在手机中录制了一个时间比较长的视频无法分享到微信中，那么可以使用ffmpeg将该视频文件切割为多个文件：</p>
+<p>ffmpeg -i input.mp4 -t 00:00:50 -c copy small-1mp4 -ss 00:00:50 -codec copy small-2.mp4<br>
+4)提取一个视频文件中的音频文件：</p>
+<p>ffmpeg -i input.mp4 -vn -acodec copy output.m4a<br>
+5)使一个视频的音频静音，即只保留视频：</p>
+<p>ffmpeg -i input.mp4 -an -vcodec copy output.m4a<br>
+6)从MP4文件中抽取视频流导出为裸H264数据：</p>
+<p>ffmpeg -i output.mp4 -an -vcodec copy -bsf:v h264_mp4toannexb output.h264<br>
+7)使用AAC音频数据和H264的视频生成MP4文件：</p>
+<p>ffmpeg -i test.aac -i test.h264 -acodec copy -bsf:a aac_adtstoasc -vcodec copy -f mp4 output.mp4<br>
+8)对音频文件的编码格式做转换：</p>
+<p>ffmpeg -i input.wav -acodec libfdk_aac output.aac<br>
+9)从WAV音频文件中导出PCM裸数据</p>
+<p>ffmpeg -i input.wav -acodec pcm_s16le -f s16le ouput.pcm<br>
+这样就导出了用16个bit来表示一个sample的PCM数据了，并且每个sample的字节排列顺序都是小尾端表示的格式，声道数和采样率使用的都是原始WAV文件的声道数和采样率的PCM数据。<br>
+10)重新编码视频文件，复制音频流，同时封装到MP4格式的文件中：</p>
+<p>ffmpeg -i input.flv -vcodec libx264 -acodec copy output.mp4<br>
+11)将一个MP4格式的视频转换成为gif格式的动图：</p>
+<p>ffmpeg -i input.mp4 -vf scale=100:-1 -t 5 -r 10 image.gif<br>
+上述命令按照分辨比例不动宽度改为100（使用VideoFilter的scaleFilter）,帧率改为10（-r）,只处理前5秒钟（-t）的视频，生成gif.<br>
+12）将一个视频的画面部分生成图片，比如要分析一个视频里面的每一帧都是什么内容的时候，可能就需要用到这个命令了</p>
+<p>ffmpeg -i output.mp4 -r 0.25 frames_%04d.png<br>
+上述命令每4秒钟截取一帧视频画面生成一张图片，生成的图片从frame_0001.png开始一直递增下去。<br>
+13.使用一组图片可以组成一个gif，如果你连拍了一组图片，就可以用下面的这行命令生成一个gif:</p>
+<p>ffmpeg -i frames_%04d.png -r 5 output.gif<br>
+14.使用音频效果器，可以改变一个音频媒体文件中的音量</p>
+<p>ffmpeg -i input.wav -af 'volume=0.5' output.wav<br>
+15.淡入效果器的使用：</p>
+<p>ffmpeg -i input.wav -filter_complex afade=t=in:ss=0:d=5 output.wav<br>
+上述命令可以将input.wav文件中的前5s做一个淡入效果，输出到output.wav中<br>
+16.淡出效果器的使用</p>
+<p>ffmpeg -i input.wav -filter_complex afade=t=out:ss=200:d=5 output.wav<br>
+17.将两路声音进行合并，比如要给一段声音加上背景音乐：</p>
+<p>ffmpeg -i vocal.wav -i accompany.wav -filter_complex amix=inputs=2:duration=shortest output.wav<br>
+上述命令是将vocal.wav和accompany.wav两个文件进行mix,按照时间长度较短的音频文件的时间长度作为最终输出的output.wav的时间长度。<br>
+18）对声音进行变速但不变调效果器的使用：</p>
+<p>ffmpeg -i vocal.wav -filter_complex atempo=0.5 output.wav<br>
+上述命令是将vocal.wav按照0.5倍的速度进行处理生成output.wav,时间长度将会变为输入的2倍。但是音高是不变的，这就是大家常说的变速不变调。<br>
+19）为视频增加水印效果</p>
+<p>ffmpeg -i input.mp4 -i changba_icon.png -filter_complex '[0:v][1:v]overlay=main_w-overlay_w-10:10:1[out]' -map '[out]' output.mp4<br>
+上述命令包含了几个内置参数，main_w代表主视频宽度，overlay_w代表水印宽度，main_h代表主视频高度，overlay_h代表水印高度。<br>
+20）视频提亮效果器的使用</p>
+<p>ffmpeg -i input.flv -c:v libx264 -b:v 800k -c:a libfdk_aac -vf eq=brightness=0.25 -f mp4 output.mp4<br>
+提亮参数是brightness,取值范围是从-1.0到1.0，默认值是0.<br>
+21)为视频增加对比度效果</p>
+<p>ffmpeg -i input.flv -c:v libx264 -b:v 800k -c:a libfdk_aac -vf eq=contrast=1.5 -f mp4 output.mp4<br>
+对比度参数是contrast,取值范围是从-2.0到2.0，默认值是1.0.<br>
+22）视频旋转效果器的使用</p>
+<p>ffmpeg -i input.mp4 -vf &quot;transpose=1&quot; -b:v 600k output.mp4<br>
+23)视频剪裁器的使用：</p>
+<p>ffmpeg -i input.mp4 -an -vf &quot;crop=240:480:120:0&quot; -vcodec libx264 -b:v 600k output.mp4<br>
+24)将一张RGBA格式表示的数据转换为JPEG格式的图片</p>
+<p>ffmpeg -f rawvideo -pix_fmt rgba -s 480*480 -i texture.rgb -f image2 -vcodec mjpeg output.jpg<br>
+25)将一个YUV格式表示的数据转换为JPEG格式的图片：</p>
+<p>ffmpeg -f rawvideo -pix_fmt yuv420p -s 480*480 -i texture.yuv -f image1 -vcodec mjpeg output.jpg<br>
+26)将一段视频推送到流媒体服务器上：</p>
+<p>ffmpeg -re -i input.mp4 -acodec copy -vcodec copy -f flv rtmp://xxx<br>
+上述代码中，rtmp://xxx代表流媒体服务器的地址，加上-re参数代表将实际媒体文件的播放速度作为推流速度进行推送。<br>
+27）将流媒体服务器上的流dump到本地：</p>
+<p>ffmpeg -i http://xxx/xxx.flv -acodec copy -vcodec copy -f flv output.flv<br>
+28)将两个音频文件以两路流的形式封装到一个文件中，比如在K歌的应用场景中，原伴唱实时切换的场景下，可以使用一个文件包含两路流，一路是伴奏流，另外一路是原唱流。</p>
+<p>ffmpeg -i 131.mp3 -i 134.mp3 -map 0:a -c🅰️0 libfdk_aac -b🅰️0 96k -map 1:a -c🅰️1 libfdk_aac -b🅰️1 64k -vn -f mp4 output.m4a<br>
+三、FFmpeg API的介绍与使用<br>
+在FFmpeg中，AVFormatContext就是对容器或者说媒体文件层次的一个抽象，该文件中（或者说在这个容器里面）包含了多路流（音频流、视频流、字幕流等），对流的抽象就是AVStream;在每一路流中都会描述这路流的编码格式，对编解码格式以及编解码器的抽象就是AVCodecContext与AVCodec;对编解器或者解码器的输入输出部分，也就是压缩数据以及原始数据的抽象就是AVPacket与AVFrame。</p>
+<p>当然除了编解码之外，对于音视频的处理肯定是针对于原始数据的处理，也就是针对于AVFrame的处理，使用的就是AVFilter。</p>
+<p>下面来介绍一个解码的实例，该实例把一个视频文件解码成单独的音频PCM文件和视频YUV文件。</p>
+<p>1.引用头文件<br>
+这里直接将文件（include文件夹与libffmpeg.a静态库文件）拿过来使用。可在工程文件中的配置中修改Header Search Path。</p>
+<p>#include &quot;libavformat/avformat.h&quot;<br>
+#include &quot;libswscale/swscale.h&quot;<br>
+#include &quot;libswresample/swresample.h&quot;<br>
+#include &quot;libavutil/pixdesc.h&quot;<br>
+2.注册协议、格式与解编码器<br>
+使用FFmpeg的API，首先要调用FFmpeg的注册协议、格式与编码器的方法，确保所有的格式与编解码器都被注册到了FFmpeg框架中，当然如果需要用到网络的操作，那么也应该将网络协议部分注册到FFmpeg框架，以便于后续再去查找对应的格式。代码如下：</p>
+<p>avformat_network_init();<br>
+av_register_all();<br>
+文档中还有一个方法是avcodec_register_all(),其用于将所有编解码器注册到FFmpeg框架中，但是av_register_all方法内部已经调用了avcodec_register_all方法，所以其实只需要调用av_register_all就可以了。</p>
+<p>3.打开媒体文件源，并设置超时回调<br>
+注册了格式以及编码接之后，接下来就应该打开对应的媒体文件了，当然该文件既可能是本地磁盘的文件，也可能是网络媒体资源的一个链接，如果是网络链接，则会涉及不同的协议，比如RTMP、HTTP等协议的视频源。打开媒体资源以及设置超时回调的代码如下：</p>
+<p>AVFormatContext *formatCtx = avformat_alloc_context();<br>
+AVIOInterruptCB int_cb = {interrupt_callback,(__bridge void *)(self)};<br>
+formatCtx-&gt;interrupt_callback = int_cb;<br>
+avformat_open_input(formatCtx,path,NULL,NULL);<br>
+avformat_find_steam_info(formatCtx,NULL);<br>
+4.寻找各个流，并且打开对应的解码器<br>
+上一步已打开了媒体文件，相当于打开了一根电线，这根电线里面其实还有一条红色的线和蓝色的线，这就和媒体文件中的流非常类似了，红色的线代表音频流，蓝色的线代表视频流。所以这一步我们就要寻找出各个流，然后找到流中对应的解码器，并且打开它。<br>
+寻找音视频流：</p>
+<p>for (int i = 0;i &lt; formatCtx-&gt;nb_streams; i++ ) {<br>
+AVStream *stream = formatCtx-&gt;streams[i];<br>
+if(AVMEDIA_TYPE_VIDEO == stream-&gt;codec-&gt;codec_type) {<br>
+// 视频流<br>
+videoStreamIndex = i;<br>
+}else{<br>
+// 音频流<br>
+audioStreamIndex = i;<br>
+}<br>
+}<br>
+打开音频流解码器</p>
+<p>AVCodecContext *audioCodecCtx = audioStream-&gt;codec;<br>
+AVCodec *codec = avcodec_find_decoder(audioCodecCtx-&gt;codec_id);<br>
+if(!codec){<br>
+// 找不到对应的音频解码器<br>
+}<br>
+int openCodecErrCode = 0;<br>
+if((openCodecErrCode = avcodec_open2(codecCtx,codec,NULL)) &lt; 0){<br>
+// 打开音频解码器失败<br>
+}<br>
+打开视频流解码器</p>
+<p>AVCodecContext *videoCodecCtx = videoStream-&gt;codec;<br>
+AVCodec *codec = avcodec_find_decoder(videoCodecCtx-&gt;codec_id);<br>
+if(!codec){<br>
+// 找不到对应的视频解码器<br>
+}<br>
+int openCodecErrCode = 0;<br>
+if((openCodecErrCode = avcodec_open2(codecCtx,codec,NULL)) &lt; 0){<br>
+// 打开视频解码器失败<br>
+}<br>
+5.初始化解码后数据的结构体<br>
+知道了音视频解码器的信息之后，下面需要分配出解码之后的数据所存放的内存空间，以及进行格式转换需要用到的对象。<br>
+构建音频的格式转换对象以及音频解码后数据存放的对象：</p>
+<p>SwrContext *swrContext = NULL;<br>
+if(audioCodecCtx-&gt;sample_fmt != AV_SAMPLE_FMT_S16){<br>
+// 如果不是我们需要的数据格式<br>
+swrContext = swr_alloc_set_opts(NULL,outputChannel,AV_SAMPLE_FMT_S16,outSampleRate,in_ch_layout,in_sample_fmt,in_sample_rate,0,NULL);<br>
+if(!swrContext || swr_init(swrContext)){<br>
+if(swrContext){<br>
+swr_free(&amp;swrContext);<br>
+}<br>
+}<br>
+audioFrame = avcodec_alloc_frame();<br>
+}<br>
+构建视频的格式转换对象以及视频解码后数据存放的对象：</p>
+<p>AVPicture picture;<br>
+bool pictureVaild = avpicture_alloc(&amp;picture,PIX_FMT_YUV420P,videoCodecCtx-&gt;width,videoCodecCtx-&gt;height) == 0;<br>
+if(!pictureValid){<br>
+// 分配失败<br>
+return false;<br>
+}</p>
+<p>swsContext = sws_getCachedContext(swsContext,videoCodecCtx-&gt;width,videoCodecCtx-&gt;height,<br>
+videoCodecCtx-&gt;pix_fmt,<br>
+videoCodecCtx-&gt;width<br>
+videoCodecCtx-&gt;height,<br>
+PIX_FMT_YUV420P,<br>
+SWS_FAST_BILINEAR,<br>
+NULL,NULL,NULL);</p>
+<p>videoFrame = avcodec_alloc_frame();<br>
+6.读取流内容并且解码<br>
+打开了解码器之后，就可以读取一部分流中的数据（压缩数据），然后将压缩数据作为解码器的输入，解码器将其解码为原始数据（裸数据 ），之后就可以将原始数据写入文件了：</p>
+<p>AVPacket packet;<br>
+int gotFrame = 0;<br>
+while(true){<br>
+if(av_read_frame(formatContext,&amp;packet)){<br>
+//End of File<br>
+break;<br>
+}<br>
+int packetStreamIndex = packet.stream_index;<br>
+if(packetStreamIndex == videoStreamIndex) {<br>
+int len = avcodec_decode_video2(videoCodecCtx,videoFrame,&amp;gotFrame,&amp;packet);<br>
+if(len&lt;0){<br>
+break;<br>
+}<br>
+if(gotFrame){<br>
+self-&gt;handleVideoFrame();<br>
+}<br>
+}else if(packetStreamIndex == audioStreamIndex){<br>
+int len = avcodec_decode_audio4(audioCodecCtx,audioFrame,&amp;gotFrame,&amp;packet);<br>
+if(len &lt; 0){<br>
+break;<br>
+}<br>
+if(gotFrame){<br>
+self-&gt;handleVideoFrame();<br>
+}<br>
+}<br>
+}<br>
+7.处理解码后的裸数据<br>
+解码之后会得到裸数据，音频就是PCM数据，视频就是YUV数据。下面将其处理成我们所需要的格式并且进行写文件。<br>
+音频裸数据的处理：</p>
+<p>void * audioData;<br>
+int numFrames;<br>
+if(swrContext) {<br>
+int bufSize = av_samples_get_buffer_size(NULL,channels,(int)(audioFrame-&gt;nb_samples * channels),AV_SAMPLE_FMT_S16,1);<br>
+if(!_swrBuffer || _swrBufferSize &lt;bufSize){<br>
+swrBufferSize = bufSize;<br>
+swrBuffer = realloc(_swrBuffer,_swrBufferSize);<br>
+}<br>
+Byte *outbuf[2] = {_swrBuffer,0};<br>
+nunFrames = swr_convert(_swrContext,outbuf,(int)(audioFrame-&gt;nb_samples *channels),(const uint8_t **)_audioFrame-&gt;data,audioFrame-&gt;nb_samples);<br>
+audioData = swrBuffer;<br>
+} else {<br>
+audioData = audioFrame-&gt;data[0];<br>
+numFrames = audioFrame-&gt;nb_samples;<br>
+}<br>
+接收到音频裸数据之后，就可以直接写文件了，比如写到文件audio.pcm中。<br>
+视频裸数据的处理：</p>
+<p>uint8_t* luma;<br>
+uint8_t* chromaB;<br>
+uint8_t* chromaR;<br>
+if(videoCodecCtx-&gt;pix_fmt == AV_PIX_FMT_YUV420P || videoCodecCtx-&gt;pix_fmt == AV_PIX_FMT_YUVJ420P){</p>
+<pre><code>luma = copyFrameData(videoFrame-&gt;data[0],
+                videoFrame-&gt;linesize[0],
+                videoCodecCtx-&gt;width,
+                videoCodecCtx-&gt;width,
+                videoCodecCtx-&gt;height);
+chromaB =copyFrameData(videoFrame-&gt;data[1],
+                videoFrame-&gt;linesize[1],
+                videoCodecCtx-&gt;width,
+                videoCodecCtx-&gt;width/2,
+                videoCodecCtx-&gt;height/2);
+chromaR =copyFrameData(videoFrame-&gt;data[2],
+                videoFrame-&gt;linesize[2],
+                videoCodecCtx-&gt;width,
+                videoCodecCtx-&gt;width/2,
+                videoCodecCtx-&gt;height/2);
+</code></pre>
+<p>} else {<br>
+sws_scale(_swsContext,(const uint8_t **)videoFrame-&gt;data,videoFrame-&gt;linesize,0,videoCodecCtx-&gt;height,picture.data,picture,linesize);<br>
+luma = copyFrameData(picture.data[0],<br>
+picture.linesize[0],<br>
+videoCodecCtx-&gt;width,<br>
+videoCodecCtx-&gt;width,<br>
+videoCodecCtx-&gt;height);<br>
+chromaB =copyFrameData(picture.data[1],<br>
+picture.linesize[1],<br>
+videoCodecCtx-&gt;width,<br>
+videoCodecCtx-&gt;width/2,<br>
+videoCodecCtx-&gt;height/2);<br>
+chromaR =copyFrameData(picture.data[2],<br>
+picture.linesize[2],<br>
+videoCodecCtx-&gt;width,<br>
+videoCodecCtx-&gt;width/2,<br>
+videoCodecCtx-&gt;height/2);</p>
+<p>}<br>
+接收到YUV数据之后也可以直接写入文件了，比如写到文件video.yuv中</p>
+<p>8.关闭所有资源<br>
+解码完毕之后，或者在解码过程中不想继续解码了，可以退出程序，当然退出的时候，要将用到的FFmpeg框架中的资源，包括FFmpeg框架对外的连接资源等全都释放掉。<br>
+关闭音频资源:</p>
+<p>if(swrBuffer){<br>
+free(swrBuffer);<br>
+swrBuffer = NULL;<br>
+swrBufferSize = 0;<br>
+}</p>
+<p>if(swrContext){<br>
+swr_free(&amp;swrContext);<br>
+swrContext = NULL;<br>
+}</p>
+<p>if (audioFrame){<br>
+av_free(audioFrame);<br>
+audioFrame = NULL;<br>
+}</p>
+<p>if (audioCodecCtx){<br>
+avcodec_close(audioCodecCtx);<br>
+audioCodecCtx = NULL;<br>
+}<br>
+关闭视频资源</p>
+<p>if(swrContext){<br>
+swr_freeContext(&amp;swrContext);<br>
+swrContext = NULL;<br>
+}</p>
+<p>if(pictureValid) {<br>
+avpicture_free(&amp;picture);<br>
+pictureValid = false;<br>
+}</p>
+<p>if(videoFrame){<br>
+av_free(videoFrame);<br>
+videoFrame = NULL;<br>
+}</p>
+<p>if (videoCodecCtx) {<br>
+avcodec_close(videoCodecCtx);<br>
+videoCodecCtx = NULL;<br>
+}<br>
+关闭连接资源</p>
+<p>if(formatCtx){<br>
+avformat_close_input(&amp;formatCtx);<br>
+formatCtx = NULL;<br>
+}<br>
+以上就是利用FFmpeg解码的全部过程了，其中包括打开文件流、解析格式、解析流并且打开解码器、解码和处理，以及最终关闭所有资源的操作。</p>
+<p>四、FFmpeg源码结构<br>
+1.libavformat与libavcodec介绍<br>
+AVFormatContext是API层直接接触到的结构体，它会进行格式的封装与解封装，它的数据部分由底层提供，底层使用了AVIOContext,这个AVIOContext实际上就是普通的I/O增加了一层Buffer缓冲区，再往底层就是URLContext,也就是到达了协议层，协议层的具体实现有很多，包括rtmp、http、hls、file等。<br>
+AVCodecContext是包含在一个AVStream里面的，即描述了这路流的编码格式是什么，其中存放了具体的编码格式信息，根据Codec的信息可以打开编码器或者解码器，然后利用该编码器或者解码器进行AVPacket与AVFrame之间的转换（实际上就是解码或者编码的过程）</p>
+<p>2.FFmpeg通用API分析<br>
+（1）av_register_all分析<br>
+编译FFmpeg的时候，做了configure的配置，其中开启（enable）或者关闭（disable）了很多选项，configure的配置会生成两个文件：config.mk与config.h。config.mk实际上就是makefile文件需要包含进去的子模块，会作用在编译阶段，帮助开发者编译出正确的库；而config.h是作用在运行阶段，这一阶段将确定需要注册哪些容器以及编解码格式到FFmpeg框架中。所以该函数的内部实现会先调用avcodec_register_all来注册所有config.h里面开放的编解码器，然后会注册所有的Muxer和Demuxer(也就是封装格式)，最后注册所有的Protocol(即协议层的东西)。这样一来，在configure过程中开启（enable）或者关闭（disable）的选项就作用到了运行时，该函数的源码分析涉及的源码文件包括：url.c、allformats.c、mux.c、format.c等文件。</p>
+<p>（2）av_find_codec分析<br>
+这里面其实包含了两部分的内容：一部分是寻找解码器，一部分是寻找编码器。其实在第一步的av_register_all函数里面已经把编码器和解码器都存放到一个链表中了，在这里寻找编码器或者解码器都是从第一步构造的链表中进行遍历，通过Codec的ID或者name进行条件匹配，最终返回对应的Codec。</p>
+<p>（3）avcodec_open2分析<br>
+该函数是打开编解码器（Codec）的函数，无论是编码过程还是解码过程，都会用到该函数，该函数的输入参数有三个：第一个是AVCodecContext,解码过程由FFmpeg引擎填充，编码过程由开发者自己构造，如果想要传入私有参数，则为它的priv_data设置参数，比如在libx264编码器中设置prest、tune、profile等；第二个参数是上一步通过av_find_codec寻找出来的编解码器（Codec）;第三个参数一般会传递NULL。具体到改函数的实现时，就会找到对应的实现文件，那么其实如何找到实现文件的呢？这就需要回到第一步中来看看是如何注册的，比如libx264的编码器，查看其注册会发现ff_libx264_encoder结构体的定义存在于libx264.c中，所以该Codec的生命周期方法就会委托给该结构体对应的函数指针所指向的函数，open对应的就是init函数指针所指向的函数，该函数里面就会调用具体的编码库的API，而LAME这个Codec会调用LAME的编码库的API，并且会以对应的AVCodecContext中的priv_data来填充对应第三方库所需要的私有参数，如果开发者没有对属性priv_data填充值，那么就会使用默认值。</p>
+<p>（4）avcodec_close分析<br>
+如果理解了avcodec_open,那么对应的close就是一个逆过程，找到对应实现文件中的close函数指针所指向的函数，然后该函数会调用对应第三方库的API来关闭掉对应的编码库。其实FFmpeg所做的事情就是透明化所有的编解码库，用自己的封装来为开发者提供统一的接口。开发者使用不同的编码库时，只需要指明要使用哪一个即可，这也充分体现了面向对象编程中的封装特性。</p>
+<p>3.调用FFmpeg解码时用到的函数分析<br>
+（1）avformat_open_input分析<br>
+函数avformat_open_input会根据所提供的文件路径判断文件的格式，其实就是通过这一步来决定到底使用的是哪一个Demuxer.举例来说，如果是flv，那么Demuxer就会使用对应的ff_flv_demuxer,所以对应的关键生命周期的方法read_header、read_packet、read_seek、read_close都会使用该flv的Demuxer中函数指针指定的函数。read_header函数会将AVStream结构体构造好，以便后续的步骤继续使用AVStream作为输入参数。</p>
+<p>（2）avformat_find_stream_info分析<br>
+该方法的作用是把所有Stream的MetaData信息填充好。方法内部会先查找对应的解码器，然后打开对应的解码器，紧接着会利用Demuxer中的read_packet函数读取一段数据进行解码，当然解码的数据越多，分析出的流信息就会越准确，如果是本地资源，那么很快就可以得到分成准确的信息了，但是对于网络资源来说，则会比较慢，因此该函数有几个参数可以控制读取数据的长度，一个是probe size,一个是max_analyze_duration,还有一个是fps_probe_size,这三个参数共同控制解码数据的长度，当然，如果配置这几个参数的值越小，那么这个函数执行的时间就会越快，但是会导致AVStream结构体里面一些信息（视频的宽、高、fps、编码类型等）不准确。<br>
+（3）av_read_frame分析<br>
+使用该方法读取出来的数据是AVPacket,该函数的实现首先会委托到Demuxer的read_packet方法中去，当然read_packet通过解复用层和协议层的处理之后，会将数据返回到这里，在该函数中进行数据缓冲处理。对于音频流，一个AVPacket可能包含多个AVFrame,但是对于视频流，一个AVPacket只包含一个AVFrame,该函数最终只会返回一个AVPacket结构体。<br>
+（4）avcodec_decode分析<br>
+该方法包含了两部分内容，一部分是解码视频，一部分是解码音频，在上面的函数分析中，我们知道，解码时会委托给对应的解码器来实施的，在打开解码器的时候就会找到对应解码器的实现，比如对于解码H264来讲，会找到ff_h264_decoder,其中会有对应的生命周期函数的实现，最重要的是init、decode、close这三个方法，分别对应于打开解码器、解码以及关闭解码器的操作，而解码过程就是调用decode方法。<br>
+（5）avformat_close_input分析<br>
+该函数负责释放对应的资源，首先会调用对应的Demuxer中的生命周期read_close方法，然后释放掉AVFormatContext,最后关闭文件或者远程网络连接。</p>
+<p>4.调用FFmpeg编码时用到的函数分析<br>
+avformat_alloc_output_context2分析<br>
+该函数内部需要调用方法avformat_alloc_context来分配一个AVFormatContext结构体，当然最关键的还是根据上一步注册的Muxer和Demuxer部分（也就是封装格式部分）去找到对应的格式，如果找不到对应的格式，那么这里会返回找不到对应各式的错误提示。<br>
+源码解析的更多内容，请看雷宵华的博客。</p>
+<p>作者：张璠<br>
+链接：https://www.jianshu.com/p/f20a47333d74<br>
+来源：简书<br>
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://github.com/gianyao/GianGridea.git/post/23/" class="post-title gt-a-link">
+                    公众号ID
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">长期主义者，保持写作</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://github.com/gianyao/GianGridea.git/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

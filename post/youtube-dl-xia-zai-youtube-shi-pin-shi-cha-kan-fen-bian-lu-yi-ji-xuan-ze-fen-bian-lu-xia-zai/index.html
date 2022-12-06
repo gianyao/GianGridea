@@ -1,0 +1,171 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>youtube-dl下载youtube视频时查看分辨率以及选择分辨率下载 | 大安的博客</title>
+
+<link rel="shortcut icon" href="https://github.com/gianyao/GianGridea.git/favicon.ico?v=1670311604485">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://github.com/gianyao/GianGridea.git/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            大安的博客
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1670311604485" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    youtube-dl下载youtube视频时查看分辨率以及选择分辨率下载
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-04-28 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <p>1、查看分辨率：</p>
+<p>youtube-dl -F https://www.youtube.com/watch?v=_NMf1TpiFwY</p>
+<p>技术分享图片</p>
+<p>2、根据分辨率下载，比如下载1280*720的mp4,前面的数字是136</p>
+<p>则可以:youtube-dl -f 136 https://www.youtube.com/watch?v=_NMf1TpiFwY</p>
+<p>youtube-dl -f bestvideo[ext=mp4] --proxy socks5://127.0.0.1:7891/<br>
+youtube-dl -F --proxy socks5://127.0.0.1:7891/</p>
+<p>另:youtube-dl -f best https://www.youtube.com/watch?v=_NMf1TpiFwY，这个命令一般也可以下载分辨率最好的视频，而是下载的有声音的视频中分辨率最好的。</p>
+<p>3、其他一些命令行：</p>
+<p>Download best mp4 format available or any other best if no mp4 available<br>
+$ youtube-dl -f ‘bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best‘<br>
+Download best format available but not better that 480p<br>
+$ youtube-dl -f ‘bestvideo[height&lt;=480]+bestaudio/best[height&lt;=480]‘<br>
+Download best video only format but no bigger than 50 MB<br>
+$ youtube-dl -f ‘best[filesize&lt;50M]‘<br>
+Download best format available via direct link over HTTP/HTTPS protocol<br>
+$ youtube-dl -f ‘(bestvideo+bestaudio/best)[protocol^=http]‘</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://github.com/gianyao/GianGridea.git/post/youtube-dl-an-zhuang-he-yong-fa/" class="post-title gt-a-link">
+                    youtube-dl 安装和用法
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">长期主义者，保持写作</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://github.com/gianyao/GianGridea.git/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
